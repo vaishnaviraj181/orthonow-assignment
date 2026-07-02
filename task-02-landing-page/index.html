@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book an Orthopaedic Consultation | OrthoNow Bengaluru</title>
+<meta name="description" content="Get an expert orthopaedic opinion on your knee or back pain. 9 clinics across Bengaluru, Hyderabad and Chennai. Book a consultation in under a minute.">
+
+<!--
+  ARCHITECTURE NOTES (for the reviewing developer):
+  - Zero external requests: no web fonts, no CDN libraries, no images.
+    This is the single biggest lever for a 90+ mobile PageSpeed score —
+    there is nothing to wait on but this one HTML file.
+  - System font stack only (-apple-system, Segoe UI, Roboto, etc.) so
+    text renders instantly with no FOUT/FOIT and no extra network request.
+  - All icons/illustrations are inline SVG so they're part of the single
+    file and don't trigger image requests.
+  - CSS is in <style>, JS is in <style>... wait, JS is in <script> at the
+    bottom of <body> so it never blocks initial paint.
+-->
+
+<style>
+  :root {
+    /* --- Token system ---
+       Subject: a clinical, no-nonsense orthopaedic chain. The signature
+       move is a single accent ("Recovery Orange") used ONLY on the CTA
+       and the trust number, against a calm clinical navy/ink palette —
+       so the one thing we want a 28-50yo professional to do (tap the
+       button) is the most visually loud thing on the page. */
+    --ink: #0F1E2E;        /* near-black navy, body text & header bg */
+    --navy: #16314F;       /* secondary panels */
+    --paper: #F6F4EF;      /* warm off-white page background */
+    --line: #DCD7CB;       /* hairline borders on warm paper */
+    --accent: #D9622B;     /* recovery orange — CTA + emphasis only */
+    --accent-ink: #FFFFFF;
+    --muted: #5B6B7A;
+
+    --font-display: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-body: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    font-family: var(--font-body);
+    color: var(--ink);
+    background: var(--paper);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  img, svg { display: block; max-width: 100%; }
+
+  a { color: inherit; }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  /* ---------- Top bar ---------- */
+  .topbar {
+    background: var(--ink);
+    color: #EDEAE2;
+    font-size: 13px;
+  }
+  .topbar .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 40px;
+  }
+  .topbar .brand {
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-size: 13px;
+  }
+  .topbar .phone {
+    text-decoration: none;
+    color: #EDEAE2;
+    font-weight: 600;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    background: var(--ink);
+    color: #fff;
+    padding: 36px 0 0;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 36px;
+    align-items: start;
+    padding-bottom: 36px;
+  }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 14px;
+  }
+  .eyebrow .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent);
+    display: inline-block;
+  }
+  h1 {
+    font-family: var(--font-display);
+    font-size: clamp(30px, 4.4vw, 46px);
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+    margin: 0 0 16px;
+    font-weight: 800;
+  }
+  h1 span { color: var(--accent); }
+  .subhead {
+    font-size: 17px;
+    color: #C9D2DA;
+    max-width: 46ch;
+    margin: 0 0 26px;
+  }
+  .hero-points {
+    list-style: none;
+    margin: 0 0 8px;
+    padding: 0;
+    display: grid;
+    gap: 11px;
+  }
+  .hero-points li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14.5px;
+    color: #E3E8EC;
+  }
+  .hero-points svg { flex-shrink: 0; margin-top: 2px; }
+
+  /* ---------- Form card ---------- */
+  .form-card {
+    background: #fff;
+    color: var(--ink);
+    border-radius: 14px;
+    padding: 26px 24px 24px;
+    box-shadow: 0 18px 40px rgba(0,0,0,0.28);
+  }
+  .form-card h2 {
+    font-size: 20px;
+    margin: 0 0 4px;
+    font-weight: 800;
+  }
+  .form-card .form-sub {
+    font-size: 13.5px;
+    color: var(--muted);
+    margin: 0 0 18px;
+  }
+  .field {
+    margin-bottom: 14px;
+  }
+  .field label {
+    display: block;
+    font-size: 12.5px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--navy);
+  }
+  .field input {
+    width: 100%;
+    padding: 13px 14px;
+    font-size: 16px; /* prevents iOS zoom-on-focus */
+    border: 1.5px solid var(--line);
+    border-radius: 9px;
+    font-family: inherit;
+    background: #FBFAF7;
+  }
+  .field input:focus {
+    outline: 3px solid rgba(217,98,43,0.35);
+    outline-offset: 1px;
+    border-color: var(--accent);
+    background: #fff;
+  }
+  .field .error {
+    display: none;
+    color: #B3261E;
+    font-size: 12.5px;
+    margin-top: 5px;
+  }
+  .field.invalid input { border-color: #B3261E; }
+  .field.invalid .error { display: block; }
+
+  .cta-btn {
+    width: 100%;
+    border: none;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-size: 16.5px;
+    font-weight: 800;
+    padding: 15px 18px;
+    border-radius: 9px;
+    cursor: pointer;
+    margin-top: 4px;
+    transition: transform 0.08s ease, background 0.15s ease;
+  }
+  .cta-btn:hover { background: #C2551F; }
+  .cta-btn:active { transform: scale(0.98); }
+  .form-foot {
+    font-size: 11.5px;
+    color: var(--muted);
+    margin-top: 12px;
+    text-align: center;
+  }
+
+  /* Thank-you state */
+  .thanks {
+    display: none;
+    text-align: center;
+    padding: 18px 4px 6px;
+  }
+  .thanks.active { display: block; }
+  .form-card.submitted .booking-form { display: none; }
+  .thanks svg { margin: 0 auto 14px; }
+  .thanks h2 { font-size: 19px; margin-bottom: 8px; }
+  .thanks p { font-size: 14px; color: var(--muted); margin: 0; }
+
+  /* ---------- Trust strip ---------- */
+  .trust {
+    background: var(--navy);
+    color: #fff;
+    padding: 18px 0;
+  }
+  .trust .container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 22px;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .trust-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13.5px;
+    color: #DCE3E9;
+  }
+  .trust-item strong {
+    font-size: 19px;
+    color: #fff;
+    font-weight: 800;
+  }
+
+  /* ---------- Why section ---------- */
+  .why {
+    padding: 56px 0;
+  }
+  .why h2 {
+    font-size: clamp(22px, 3vw, 30px);
+    margin: 0 0 8px;
+    font-weight: 800;
+  }
+  .why .lede {
+    color: var(--muted);
+    max-width: 60ch;
+    margin: 0 0 32px;
+    font-size: 15px;
+  }
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .why-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .why-card svg { margin-bottom: 12px; }
+  .why-card h3 {
+    font-size: 15.5px;
+    margin: 0 0 6px;
+    font-weight: 800;
+  }
+  .why-card p {
+    font-size: 13.5px;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  /* ---------- Bottom CTA ---------- */
+  .bottom-cta {
+    background: var(--ink);
+    color: #fff;
+    padding: 44px 0;
+    text-align: center;
+  }
+  .bottom-cta h2 {
+    font-size: clamp(20px, 3vw, 26px);
+    margin: 0 0 18px;
+  }
+  .bottom-cta .cta-btn {
+    width: auto;
+    padding: 14px 34px;
+    display: inline-block;
+  }
+
+  footer {
+    padding: 22px 0 32px;
+    font-size: 12px;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  /* ---------- Mobile ---------- */
+  @media (max-width: 760px) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+      padding-bottom: 0;
+    }
+    .hero { padding-top: 22px; }
+    .form-card {
+      border-radius: 14px 14px 0 0;
+      margin: 0 -20px;
+      padding: 24px 20px 22px;
+    }
+    h1 { font-size: 28px; }
+    .why-grid { grid-template-columns: 1fr; }
+    .trust .container { justify-content: flex-start; gap: 18px 28px; }
+    /* sticky mobile CTA so the action is always reachable without
+       hunting for the form again after scrolling */
+    .mobile-sticky-cta {
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      background: #fff;
+      border-top: 1px solid var(--line);
+      padding: 10px 16px;
+      box-shadow: 0 -6px 18px rgba(0,0,0,0.12);
+      z-index: 40;
+      display: flex;
+    }
+    .mobile-sticky-cta a {
+      flex: 1;
+      text-align: center;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 800;
+      font-size: 15px;
+      padding: 13px;
+      border-radius: 9px;
+      text-decoration: none;
+    }
+    body { padding-bottom: 64px; }
+  }
+  @media (min-width: 761px) {
+    .mobile-sticky-cta { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="container">
+    <span class="brand">OrthoNow</span>
+    <a class="phone" href="tel:+918041234567">Call: +91 80 4123 4567</a>
+  </div>
+</div>
+
+<section class="hero">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <span class="eyebrow"><span class="dot"></span>For knee &amp; back pain</span>
+      <h1>Get an expert orthopaedic opinion <span>in 20 minutes</span>, not 3 weeks of waiting</h1>
+      <p class="subhead">For working professionals in Bengaluru who keep pushing through knee or back pain between meetings. Book a consultation at any of our 9 clinics — same-week appointments available.</p>
+      <ul class="hero-points">
+        <li>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" stroke="#D9622B" stroke-width="2"/><path d="M7 12.5l3 3 7-7" stroke="#D9622B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Orthopaedic surgeons with 12+ years average experience
+        </li>
+        <li>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" stroke="#D9622B" stroke-width="2"/><path d="M7 12.5l3 3 7-7" stroke="#D9622B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          On-site X-ray &amp; diagnostics — no separate lab visit
+        </li>
+        <li>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" stroke="#D9622B" stroke-width="2"/><path d="M7 12.5l3 3 7-7" stroke="#D9622B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Evening slots available — no need to take half a day off work
+        </li>
+      </ul>
+    </div>
+
+    <div class="form-card" id="formCard">
+      <form class="booking-form" id="bookingForm" novalidate>
+        <h2>Book your consultation</h2>
+        <p class="form-sub">We'll call you within 30 minutes to confirm a slot.</p>
+
+        <div class="field" id="nameField">
+          <label for="patientName">Full name</label>
+          <input type="text" id="patientName" name="name" placeholder="e.g. Aditya Rao" autocomplete="name">
+          <span class="error">Please enter your name.</span>
+        </div>
+
+        <div class="field" id="phoneField">
+          <label for="patientPhone">Phone number</label>
+          <input type="tel" id="patientPhone" name="phone" placeholder="10-digit mobile number" autocomplete="tel" inputmode="numeric" maxlength="10">
+          <span class="error">Please enter a valid 10-digit phone number.</span>
+        </div>
+
+        <button type="submit" class="cta-btn">Book my consultation</button>
+        <p class="form-foot">No spam. Your number is only used to confirm your appointment.</p>
+      </form>
+
+      <div class="thanks" id="thanksState">
+        <svg width="52" height="52" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#D9622B"/><path d="M7 12.5l3 3 7-7" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <h2>You're booked in.</h2>
+        <p>A member of our care team will call you within 30 minutes to confirm your clinic and time slot.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="trust">
+  <div class="container">
+    <div class="trust-item"><strong>9</strong>&nbsp;clinics across Bengaluru, Hyderabad &amp; Chennai</div>
+    <div class="trust-item"><strong>40,000+</strong>&nbsp;patients treated</div>
+    <div class="trust-item"><strong>4.7/5</strong>&nbsp;average patient rating</div>
+  </div>
+</section>
+
+<section class="why">
+  <div class="container">
+    <h2>Why working professionals choose OrthoNow</h2>
+    <p class="lede">Knee and back pain rarely show up on a convenient day. We built our clinics around that.</p>
+    <div class="why-grid">
+      <div class="why-card">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 2l3 6 6 .9-4.5 4.3 1 6.3L12 16.8 6.5 19.5l1-6.3L3 8.9 9 8z" stroke="#16314F" stroke-width="1.6" stroke-linejoin="round"/></svg>
+        <h3>Specialist-led, not GP-routed</h3>
+        <p>You see an orthopaedic specialist directly — no waiting on a referral chain.</p>
+      </div>
+      <div class="why-card">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><rect x="4" y="3" width="16" height="18" rx="2" stroke="#16314F" stroke-width="1.6"/><path d="M8 8h8M8 12h8M8 16h5" stroke="#16314F" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <h3>Diagnosis in one visit</h3>
+        <p>On-site imaging means most patients leave with a clear diagnosis and plan the same day.</p>
+      </div>
+      <div class="why-card">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#16314F" stroke-width="1.6"/><path d="M12 7v5l3.5 2" stroke="#16314F" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <h3>Built around your calendar</h3>
+        <p>Evening and weekend slots across all 9 locations, so treatment doesn't mean missed work.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bottom-cta">
+  <div class="container">
+    <h2>Still pushing through the pain? Let's fix that.</h2>
+    <a href="#formCard" class="cta-btn">Book your consultation</a>
+  </div>
+</section>
+
+<footer>
+  <div class="container">© 2026 OrthoNow. A Namoza Healthcare Growth client.</div>
+</footer>
+
+<div class="mobile-sticky-cta">
+  <a href="#formCard">Book my consultation</a>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  window.dataLayer = window.dataLayer || [];
+
+  var form = document.getElementById('bookingForm');
+  var formCard = document.getElementById('formCard');
+  var thanksState = document.getElementById('thanksState');
+  var nameField = document.getElementById('nameField');
+  var phoneField = document.getElementById('phoneField');
+  var nameInput = document.getElementById('patientName');
+  var phoneInput = document.getElementById('patientPhone');
+
+  // Keep phone field numeric-only as the user types.
+  phoneInput.addEventListener('input', function () {
+    phoneInput.value = phoneInput.value.replace(/\D/g, '').slice(0, 10);
+  });
+
+  function isValidPhone(value) {
+    return /^[6-9]\d{9}$/.test(value); // Indian mobile number pattern
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    var name = nameInput.value.trim();
+    var phone = phoneInput.value.trim();
+    var valid = true;
+
+    if (name.length < 2) {
+      nameField.classList.add('invalid');
+      valid = false;
+    } else {
+      nameField.classList.remove('invalid');
+    }
+
+    if (!isValidPhone(phone)) {
+      phoneField.classList.add('invalid');
+      valid = false;
+    } else {
+      phoneField.classList.remove('invalid');
+    }
+
+    if (!valid) return;
+
+    // --- GTM dataLayer push, fired only on a successful submit ---
+    window.dataLayer.push({
+      event: 'consultation_form_submitted',
+      form_name: 'orthonow_consultation_landing',
+      lead_phone_provided: true,
+      campaign: 'expert_opinion_knee_back_2026'
+    });
+
+    // Show thank-you state without a page reload.
+    formCard.classList.add('submitted');
+    thanksState.classList.add('active');
+
+    // In production this is where a fetch() call to the integration
+    // endpoint (see Task 03) would post { name, phone } onward to
+    // HubSpot + WhatsApp. Left out here since Task 02 only requires
+    // client-side behaviour, and a real endpoint isn't reachable from
+    // a static demo file.
+  });
+})();
+</script>
+
+</body>
+</html>
